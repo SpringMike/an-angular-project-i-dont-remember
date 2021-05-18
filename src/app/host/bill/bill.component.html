@@ -1,0 +1,154 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Danh sách các đơn đặt</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a routerLink="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Danh sách đơn đặt</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+  <div class="card">
+    <div class="card-header">
+      <label>Quản lí đơn đặt theo từng nhà : </label>
+      <select (change)="changeHouse($event.target.value)" class="custom-select"
+              style="margin-right: 10px; width: 200px">
+        <option [selected]="isSelected" disabled>--- Chọn HomeStay ---</option>
+        <option *ngFor="let house of listHouseOfHost" [value]="house.id">{{house.name}}</option>
+      </select>
+<!--      <label>Lọc theo trạng thái: </label>-->
+<!--      <select (change)="changeStatus($event.target.value)" class="custom-select"-->
+<!--              style="margin-right: 10px; width: 200px">-->
+<!--        <option [selected]="isSelected" disabled>-&#45;&#45; Chọn trạng thái -&#45;&#45;</option>-->
+<!--        <option value="-1">Tất cả</option>-->
+<!--        <option value="1">Hoạt động</option>-->
+<!--        <option value="0">Chờ xác nhận</option>-->
+<!--      </select>-->
+      <button [hidden]="isDelete" *ngIf="hasRoleUser"
+              class="btn btn-danger" style="margin-left: 15px; width: 100px" data-toggle="modal"
+              data-target="#modal-delete-list">
+        Xóa
+      </button>
+    </div>
+    <div class="card-body" *ngIf="listBill != null">
+      <table class="table table-bordered" id="table-category">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;width: 10px">
+            <input
+              type="checkbox"
+              (change)="checkAllCheckBox($event)"
+            />
+          </th>
+          <th style="width: 10px">#</th>
+          <th style="text-align: center">Họ và tên</th>
+          <th style="text-align: center">Số điện thoại</th>
+          <th style="text-align: center">Ngày đặt</th>
+          <th style="text-align: center">Ngày bắt đầu thuê</th>
+          <th style="text-align: center">Ngày trả</th>
+          <th style="text-align: center">Tổng tiền thanh toán</th>
+          <th style="text-align: center; width: 250px">Trạng thái</th>
+          <th style="width: 200px; text-align: center" *ngIf="hasRoleUser">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let bill of listBill; index as i">
+          <td style="text-align: center" *ngIf="hasRoleUser">
+            <input
+              type="checkbox"
+              [(ngModel)]="listBill[i].checked"
+              (ngModelChange)="changeModel()"
+              value="{{ bill.id }}"
+            />
+          </td>
+          <td style="text-align: center">{{i + 1}}</td>
+          <td style="text-align: center">
+            <p>{{bill.nameUser}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{bill.telephoneNumber}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{bill.bookingDate}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{bill.startDate}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{bill.endDate}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{bill.totalPrice}}</p>
+          </td>
+          <td style="text-align: center">
+            <label class="status"
+                   style="background-color: green; color: #fff;text-align: center; border-radius: 2px;vertical-align: middle;">{{bill.status}}</label>
+          </td>
+          <td>
+            <div class="row">
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(bill, 'edit')" class="btn btn-block btn-warning"
+                        style="color: white">
+                  <i class="fas fa-check"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button type="button" class="btn btn-block btn-danger" style="color: white" data-toggle="modal"
+                        data-target="#modal-delete" (click)="getCategoryId(bill.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa đơn đặt</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa đơn đặt này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteCategory()">Xóa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-delete-list">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa danh sách đơn đặt</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa danh sách đơn đặt này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteListBill()">Xóa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-item-bill></app-item-bill>

@@ -1,0 +1,23 @@
+.dropdown-menu {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.header__cart {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.header__logo {
+  padding: 15px 0;
+  margin: auto;
+  width: 50%;
+}
+.header__menu {
+  padding: 24px 0;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  height: 100%;
+}

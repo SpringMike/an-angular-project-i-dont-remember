@@ -1,0 +1,156 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Danh sách HomeStay</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a routerLink="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Danh sách HomeStay</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"></h3>
+      <label>Lọc theo trạng thái: </label>
+      <select (change)="changeStatus($event.target.value)" class="custom-select"
+              style="margin-right: 10px; width: 200px">
+        <option [selected]="isSelected" disabled>--- Chọn trạng thái ---</option>
+        <option value="-1">Tất cả</option>
+        <option value="1">Hoạt động</option>
+        <option value="0">Chờ xác nhận</option>
+      </select>
+      <button (click)="initModal({}, 'add')" *ngIf="hasRoleUser" class="btn btn-success" style="width: 100px">
+        Tạo mới
+      </button>
+      <button [hidden]="isDelete" *ngIf="hasRoleUser"
+              class="btn btn-danger" style="margin-left: 15px; width: 100px" data-toggle="modal"
+              data-target="#modal-delete-list">
+        Xóa
+      </button>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered" id="table-category">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;width: 10px" *ngIf="hasRoleUser">
+            <input
+              type="checkbox"
+              (change)="checkAllCheckBox($event)"
+            />
+          </th>
+          <th style="width: 10px">#</th>
+          <th style="text-align: center">Tên nhà</th>
+          <th style="text-align: center">Địa chỉ</th>
+          <th style="text-align: center">Số lượng phòng</th>
+          <th style="text-align: center">Trạng thái</th>
+          <th style="width: 200px; text-align: center" *ngIf="hasRoleUser">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let house of listHouse; index as i">
+          <td style="text-align: center" *ngIf="hasRoleUser">
+            <input
+              type="checkbox"
+              [(ngModel)]="listHouse[i].checked"
+              (ngModelChange)="changeModel()"
+              value="{{ house.id }}"
+            />
+          </td>
+          <td style="text-align: center">{{i + 1}}</td>
+          <td style="text-align: center">
+            <p>{{house.name}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{house.address}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{house.numberRoom}}</p>
+          </td>
+          <td style="text-align: center">
+            <label class="status"
+                   style="background-color: green; color: #fff;text-align: center; border-radius: 2px;vertical-align: middle;"
+                   *ngIf="house.status === true">Hoạt động</label>
+            <label class="status"
+                   style="background-color: red;color:#fff; ;text-align: center; border-radius: 2px;vertical-align: middle;"
+                   *ngIf="house.status === false">Chờ xác nhận</label>
+          </td>
+          <td>
+            <div class="row">
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(house, 'edit')" class="btn btn-block btn-warning"
+                        style="color: white">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(house, 'show')" class="btn btn-block btn-primary"
+                        style="color: white">
+                  <i class="fas fa-info"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button type="button" class="btn btn-block btn-danger" style="color: white" data-toggle="modal"
+                        data-target="#modal-delete" (click)="getHouseId(house.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa HomeStay</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa HomeStay này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteHouse()">Xóa</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal-delete-list">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa danh sách HomeStay</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa danh sách HomeStay này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteListHouse()">Xóa</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</section>
+
+<app-item-house (eventEmit)="getAllHouse()"></app-item-house>

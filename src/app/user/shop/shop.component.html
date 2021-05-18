@@ -1,0 +1,231 @@
+<app-header></app-header>
+<section class="hero hero-normal">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="hero__categories">
+          <div class="hero__categories__all">
+            <i class="fa fa-bars"></i>
+            <span>Thể loại</span>
+          </div>
+          <ul>
+            <li *ngFor="let category of listCategory"><a
+              [routerLink]="['../category',category.id]">{{category.name}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form [formGroup]="searchForm" (ngSubmit)="search()">
+              <div class="hero__search__categories">
+                Tất cả
+                <span class="arrow_carrot-down"></span>
+              </div>
+              <input type="text" placeholder="Bạn muốn thuê HomeStay ở đâu?" formControlName="name"
+                     [value]="query==null?'':query">
+              <button type="submit" class="site-btn">TÌM KIẾM</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>0396355470</h5>
+              <span>Hỗ trợ 24/7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="breadcrumb-section set-bg" [style.background]="'url(../../../assets/static/img/anh1.jpg)'">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="breadcrumb__text">
+          <h2>Danh sách HomeStay</h2>
+          <div class="breadcrumb__option">
+            <a routerLink="/">Trang chủ</a>
+            <span>Danh sách HomeStay</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="product spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-5" style="height: 100%;">
+        <div class="sidebar">
+          <div class="sidebar__item">
+            <h4>Thể loại HomeStay</h4>
+            <ul *ngFor="let category of listCategory">
+              <li><a [routerLink]="['../category',category.id]">{{category.name}}</a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar__item">
+            <div class="latest-product__text">
+              <h4>HomeStay mới</h4>
+              <div class="latest-product__slider owl-carousel">
+                <div class="latest-prdouct__slider__item">
+                  <a [routerLink]="['../house',house.id]" class="latest-product__item"
+                     *ngFor="let house of listHouseLatest">
+                    <div class="latest-product__item__pic">
+                      <img [src]="house.images[0].link" *ngIf="house.images != null"
+                           style="width: 110px; height: 110px" alt="">
+                    </div>
+                    <div class="latest-product__item__text">
+                      <h6>{{house.name}}</h6>
+                      <span>{{house.price}} VNĐ</span>
+                      <span *ngIf="house.discount!=0">Giảm: {{house.discount}}%</span>
+                    </div>
+                  </a>
+                </div>
+                <div class="latest-prdouct__slider__item">
+                  <a [routerLink]="['../house',house.id]" class="latest-product__item"
+                     *ngFor="let house of listHouseLatest">
+                    <div class="latest-product__item__pic">
+                      <img [src]="house.images[0].link" *ngIf="house.images != null"
+                           style="width: 110px; height: 110px" alt="">
+                    </div>
+                    <div class="latest-product__item__text">
+                      <h6>{{house.name}}</h6>
+                      <span>{{house.price}} VNĐ</span>
+                      <span *ngIf="house.discount!=0">Giảm: {{house.discount}} %</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sidebar__item ">
+            <h4 >Tìm kiếm nâng cao</h4>
+            <form [formGroup]="searchFormAdvanced" (ngSubmit)="searchAdvanced()">
+              <div class="hero__search__categories user-box">
+                <label>Địa chỉ: </label>
+                <input type="text" formControlName="address" style="width: 90%">
+              </div>
+              <div class="hero__search__categories user-box">
+                <label>Số lượng phòng: </label>
+                <input user-box type="number" formControlName="numberRoom" style="width: 90%">
+              </div>
+              <div class="hero__search__categories user-box">
+                <label>Giới hạn giá tiền trên: </label>
+                <input user-box type="number" formControlName="upperBound" style="width: 90%">
+              </div>
+              <div class="hero__search__categories user-box">
+                <label>Giới hạn giá tiền dưới: </label>
+                <input user-box type="number" formControlName="lowerBound" style="width: 90%">
+              </div>
+              <button  type="submit" class="site-btn user-box">TÌM
+                KIẾM
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-7">
+        <div class="product__discount">
+          <div class="section-title product__discount__title">
+            <h2>HomeStay đang được giảm giá</h2>
+          </div>
+          <div class="row">
+            <div class="product__discount__slider owl-carousel">
+              <div class="col-lg-4" *ngFor="let house of listHouseSaleOff">
+                <div class="product__discount__item">
+                  <div class="product__discount__item__pic set-bg" *ngIf="house.images != null"
+                       [style.background]="'url('+house.images[0].link+')'" style="background-size: 270px 270px">
+                    <div class="product__discount__percent">-{{house.discount}} %</div>
+                    <ul class="product__item__pic__hover">
+                      <li><a [routerLink]="['/favorite', { id:house.id }]"><i class="fa fa-heart"></i></a></li>
+                      <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                      <li>
+                        <a [routerLink]="['../house',house.id]"><i class="fa fa-info-circle"></i></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="product__discount__item__text">
+                    <span>{{house.category.name}}</span>
+                    <h5>{{house.name}}</h5>
+                    <h5>{{house.address}}</h5>
+                    <div
+                      class="product__item__price">{{house.price - house.price * (house.discount / 100)}}
+                      ( VNĐ / Ngày)
+                      <span>{{house.price}}( VNĐ / Ngày)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filter__item" >
+          <div class="section-title product__discount__title" style="padding-top: 50px">
+            <h2>Danh sách HomeStay đang cho thuê</h2>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-5">
+              <div class="filter__sort">
+                <span>Sắp xếp</span>
+                <select class="form-select">
+                  <option value="0">Default</option>
+                  <option value="0">Default</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+              <div class="filter__found">
+                <h6><span>{{listHouse.length}}</span> HomeStay</h6>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-3">
+              <div class="filter__option">
+                <span class="icon_grid-2x2"></span>
+                <span class="icon_ul"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-6"
+               *ngFor="let house of listHouse  | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize;">
+            <div class="product__item">
+              <div class="product__item__pic set-bg" *ngIf="house.images!=null"
+                   [style.background]="'url('+ house.images[0].link+')'">
+                <ul class="product__item__pic__hover">
+                  <li><a [routerLink]="['/favorite', { id:house.id }]"><i class="fa fa-heart"></i></a></li>
+                  <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                  <li>
+                    <a [routerLink]="['../house',house.id]"><i class="fa fa-info-circle"></i></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="product__discount__item__text">
+                <span>{{house.category.name}}</span>
+                <h5>{{house.name}}</h5>
+                <h5>{{house.address}}</h5>
+                <div
+                  class="product__item__price">{{house.price - house.price * (house.discount / 100)}}
+                  ( VNĐ / Ngày)
+                  <span *ngIf="house.discount!=0">{{house.price}}( VNĐ / Ngày)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" style="display: flex; justify-content: center;align-items: center">
+          <ngb-pagination *ngIf="listHouse.length > 9"
+                          [ellipses]="true" [rotate]="true"
+                          [boundaryLinks]="true" [(page)]="page"
+                          [pageSize]="pageSize"
+                          [collectionSize]="this.listHouse.length"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>

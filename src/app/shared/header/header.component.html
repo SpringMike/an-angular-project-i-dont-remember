@@ -1,0 +1,178 @@
+<div class="humberger__menu__overlay"></div>
+<div class="humberger__menu__wrapper">
+  <div class="humberger__menu__logo">
+    <a href="#"><img src="../../../assets/static/img/logo.png" alt=""></a>
+  </div>
+  <div class="humberger__menu__cart">
+    <ul>
+      <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+    </ul>
+  </div>
+  <div class="humberger__menu__widget">
+    <div class="header__top__right__language">
+      <img src="../../../assets/static/img/language.png" alt="">
+      <div>English</div>
+      <ul>
+        <li><a href="#">Vietnamese</a></li>
+        <li><a href="#">English</a></li>
+      </ul>
+    </div>
+    <div class="header__top__right__auth">
+      <a href="#"><i class="fa fa-user"></i> Login</a>
+    </div>
+  </div>
+  <nav class="humberger__menu__nav mobile-menu">
+    <ul>
+      <li class="active"><a routerLink="/">Trang chủ</a></li>
+      <li><a routerLink="/houses">Cừa hàng</a></li>
+      <li><a routerLink="/contact">Liên hệ</a></li>
+    </ul>
+  </nav>
+  <div id="mobile-menu-wrap"></div>
+  <div class="header__top__right__social">
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-linkedin"></i></a>
+    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+  </div>
+  <div class="humberger__menu__contact">
+    <ul>
+      <li><i class="fa fa-envelope"></i>help@gmail.com</li>
+      <li>Luôn mang đến cho khách hàng dịch vụ tốt nhất</li>
+    </ul>
+  </div>
+</div>
+<header class="header">
+  <div class="header__top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+          <div class="header__top__left">
+            <ul>
+              <li><i class="fa fa-envelope"></i>help@gmail.com</li>
+              <li>Luôn mang đến cho khách hàng dịch vụ tốt nhất</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="header__top__right">
+            <div class="header__top__right__social">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+            <div class="header__top__right__language">
+              <div>Theo dõi đơn đặt</div>
+              <ul *ngIf="currentUser">
+                <li><a [routerLink]="['/order', { status:true }]" style="font-size: 12px">Đã đặt</a></li>
+                <li><a [routerLink]="['/order', { status:false }]" style="font-size: 12px">Chờ xác nhận</a></li>
+              </ul>
+              <ul *ngIf="!currentUser">
+                <li><a [routerLink]="['/login']" style="font-size: 12px">Đăng nhập</a></li>
+              </ul>
+            </div>
+            <div class="dropdown header__top__right__auth">
+              <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                 aria-haspopup="false" aria-expanded="false">
+                <i class="fa fa-bell"></i><span
+                *ngIf="listNotification.length==0">0</span>
+                <span *ngIf="listNotification.length>0"
+                      style="color: red">{{this.listNotification.length}}</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" *ngIf="currentUser==null">
+                <div class="dropdown-item disabled">
+                  <h5>Thông báo</h5>
+                  <p></p>
+                </div>
+                <div class="dropdown-item disabled">
+                  <p>Bạn chưa đăng nhập</p>
+                  <p></p>
+                </div>
+              </div>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" *ngIf="currentUser!=null">
+                <div class="dropdown-item disabled">
+                  <h5>Thông báo</h5>
+                  <p></p>
+                </div>
+                <div class="dropdown-item disabled" *ngIf="listNotification.length==0">
+                  <p>Chưa có thông báo</p>
+                  <p></p>
+                </div>
+                <div class="dropdown-item"
+                     *ngFor="let notification of listNotification">
+                  <div *ngIf="notification.status == true" (click)="updateStatus(notification.id)">
+                    {{notification.content}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="header__top__right__auth" *ngIf="!currentUser">
+              <a routerLink="/login"><i class="fa fa-user"></i> Đăng nhập</a>
+            </div>
+            <div class="dropdown header__top__right__auth" *ngIf="hasRoleUser">
+              <a class="btn dropdown-toggle" role="button" id="dropdownMen" data-toggle="dropdown"
+                 aria-haspopup="false" aria-expanded="false">
+                <span>Xin chào, {{currentUser.name}}</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMen">
+                <div class="dropdown-item">
+                  <a (click)="initModal(currentUser, 'show')"><i class="fas fa-user"></i> Xem thông tin
+                    cá nhân</a>
+                </div>
+                <div class="dropdown-item">
+                  <a (click)="initModal(currentUser, 'edit')"><i class="fas fa-edit"></i> Thay đổi thông
+                    tin</a>
+                </div>
+                <div class="dropdown-item">
+                  <a routerLink="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                </div>
+              </div>
+            </div>
+            <div class="header__top__right__auth" *ngIf="hasRoleAdmin">
+              <div class="nav-item">
+                <a class="nav-link" routerLink="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+              </div>
+            </div>
+            <div class="header__top__right" *ngIf="hasRoleUser">
+              <a routerLink="/host" class="primary-btn">Đăng kí cho thuê nhà</a>
+            </div>
+            <div class="header__top__right" *ngIf="hasRoleAdmin">
+              <a routerLink="/admin" class="primary-btn">Trang quản trị</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="header__logo">
+          <a routerLink="/" class="social-auth-links text-center"><img src="../../../assets/static/img/logo.png" alt=""></a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <nav class="header__menu">
+          <ul>
+            <li class="active"><a routerLink="/">Trang chủ</a></li>
+            <li><a routerLink="/houses">HomeStay</a></li>
+            <li><a routerLink="/contact">Liên hệ</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-lg-3">
+        <div class="header__cart">
+          <ul>
+            <li><a routerLink="/favorite"><i class="fa fa-heart"></i> <span>{{this.favoriteProduct.length}}</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="humberger__open">
+      <i class="fa fa-bars"></i>
+    </div>
+  </div>
+</header>
+<app-user-item></app-user-item>

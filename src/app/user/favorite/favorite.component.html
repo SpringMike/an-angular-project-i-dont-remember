@@ -1,0 +1,107 @@
+<app-header></app-header>
+<section class="hero hero-normal">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="hero__categories">
+          <div class="hero__categories__all">
+            <i class="fa fa-bars"></i>
+            <span>Thể loại HomeStay</span>
+          </div>
+          <ul>
+            <li *ngFor="let category of listCategory"><a
+              [routerLink]="['../category',category.id]">{{category.name}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form [formGroup]="searchForm" (ngSubmit)="search()">
+              <div class="hero__search__categories">
+                Tất cả
+                <span class="arrow_carrot-down"></span>
+              </div>
+              <input type="text" placeholder="Bạn muốn thuê HomeStay ở đâu?" formControlName="name">
+              <button type="submit" class="site-btn">TÌM KIẾM</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>0396355470</h5>
+              <span>Hỗ trợ 24/7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="breadcrumb-section set-bg" [style.background]="'url(../../../assets/static/img/anh1.jpg)'">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="breadcrumb__text">
+          <h2>HomeStay đang thích</h2>
+          <div class="breadcrumb__option">
+            <a routerLink="/">Trang chủ</a>
+            <span>HomeStay đang thích</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="shoping-cart spad">
+  <div class="container">
+    <h3 *ngIf="items.length==0" style="text-align: center">Bạn chưa thích HomeStay nào !!!</h3>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="shoping__cart__table" *ngIf="items!= 0">
+          <table>
+            <thead>
+            <tr>
+              <th>HomeStay</th>
+              <th>Giá</th>
+              <th>Xem chi tiết</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of items; index as i">
+              <td>
+                <h5 style="font-size: 16px">{{item.product.name}} <br> {{item.product.address}}</h5>
+              </td>
+              <td>
+                {{item.product.price}} ( VNĐ / Ngày )
+              </td>
+              <td>
+                <a [routerLink]="['/house',item.product.id]" class="btn btn-primary"
+                   style="color: white; width: 80px; text-align: center">
+                  <i class="fas fa-info"></i>
+                </a>
+              </td>
+              <td class="shoping__cart__item__close">
+                <span class="icon_close" (click)="remove(item.product.id)"></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="shoping__cart__btns">
+          <a routerLink="/" class="primary-btn cart-btn">Tiếp tục đặt HomeStay</a>
+          <a routerLink="/favorite" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+            Cập nhật</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>

@@ -1,0 +1,87 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Danh sách tài khoản</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a routerLink="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Danh sách tài khoản</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"></h3>
+      <label>Lọc theo quyền của tài khoản: </label>
+      <select (change)="changeStatus($event.target.value)" class="custom-select"
+              style="margin-right: 10px; width: 200px">
+        <option [selected]="isSelected" disabled>---- Chọn quyền ----</option>
+        <option value="-1">Tất cả</option>
+        <option value="1">Admin</option>
+        <option value="0">Chủ nhà</option>
+      </select>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered" id="table-user">
+        <thead>
+        <tr>
+          <th style="width: 10px">#</th>
+          <th style="text-align: center">Email</th>
+          <th style="text-align: center">Họ và tên</th>
+          <th style="text-align: center">Quyền</th>
+          <th style="text-align: center">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of listUser; index as i">
+          <td style="text-align: center">{{i + 1}}</td>
+          <td style="text-align: center">
+            <p>{{user.email}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{user.fullName}}</p>
+          </td>
+          <td style="text-align: center">
+            {{user.roles[0].name}}
+          </td>
+          <td>
+            <div class="col-4" *ngIf="hasRoleAdmin" style="margin-left: auto; margin-right: auto">
+              <button type="button" class="btn btn-block btn-danger" style="color: white" data-toggle="modal"
+                      data-target="#modal-delete" (click)="getUserId(user.id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa tài khoản</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa tài khoản này</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteUser()">Xóa</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</section>

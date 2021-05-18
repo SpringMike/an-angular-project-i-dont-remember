@@ -1,0 +1,33 @@
+<div class="hailit">
+  <div class="container"><a href="#" class="social-auth-links text-center"><img
+    src="../../../assets/static/img/logo.png" alt=""></a>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="title">Đăng nhập</div>
+      <div class="input-box underline" style="width: 70%; margin-left: auto; margin-right: auto">
+        <input style="padding-left: 15px; border-radius: 5px; height: 45px; border-bottom-width: 2px" type="text" placeholder="Enter Your Email"
+               formControlName="email" required>
+        <div class="underline"></div>
+      </div>
+      <div class="input-box" style="width: 70%; margin-left: auto; margin-right: auto">
+        <input style="padding-left: 15px; border-radius: 5px" type="password" placeholder="Enter Your Password"
+               formControlName="password"
+               required>
+        <div class="underline"></div>
+      </div>
+      <div class="input-box button" style="width: 70%; margin-left: auto; margin-right: auto">
+        <input type="submit" name="" value="Đăng nhập">
+      </div>
+    </form>
+    <div class="option">Hoặc</div>
+    <div class="twitter" style="width: 70%; margin-left: auto; margin-right: auto">
+      <a href="#" style="text-align: center"><i class="fab fa-twitter"></i>Đăng nhập bằng Twitter</a>
+    </div>
+    <div class="facebook" style="width: 70%; margin-left: auto; margin-right: auto">
+      <a href="#" style="text-align: center"><i class="fab fa-facebook-f"></i>Đăng nhập bằng Facebook</a>
+    </div>
+    <div class="facebook" style="width: 70%; margin-left: auto; margin-right: auto">
+      <a [routerLink]="['/register']" class="fab" style="text-align: center">
+        <label style="text-align: center">Đăng kí tài khoản</label></a>
+    </div>
+  </div>
+</div>

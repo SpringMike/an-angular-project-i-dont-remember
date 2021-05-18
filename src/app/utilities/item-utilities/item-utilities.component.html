@@ -1,0 +1,80 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup" (ngSubmit)="save()">
+      <div class="form-group">
+        <label>Tên tiện ích</label>
+        <input
+          type="text"
+          name=""
+          class="form-control"
+          formControlName="name"
+          id="name"
+        />
+        <div *ngIf="submitted && formGroup.controls['name'].errors?.required">
+          <div
+            *ngIf="formGroup.controls['name'].errors?.required"
+            style="color: red"
+          >
+            * Tên tiện ích không được để trống
+          </div>
+        </div>
+        <label>Mô tả</label>
+        <input
+          type="text"
+          name=""
+          class="form-control"
+          formControlName="description"
+          id="description"
+        />
+        <div *ngIf="submitted && formGroup.controls['description'].errors?.required">
+          <div
+            *ngIf="formGroup.controls['description'].errors?.required"
+            style="color: red"
+          >
+            * Mô tả không được để trống
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="display:inline">
+        <label for="status">Trạng thái: </label>
+        <input type="checkbox" name="status" formControlName="status" id="status"/>
+        <label class="status"
+               style="background-color: green; color: #fff;text-align: center; border-radius: 2px;vertical-align: middle;"
+               for="status" *ngIf="formGroup.controls.status.value">Hoạt động</label>
+        <label class="status"
+               style="background-color: red;color:#fff; ;text-align: center; border-radius: 2px;vertical-align: middle;"
+               for="status" *ngIf="!formGroup.controls.status.value">Không hoạt động</label>
+      </div>
+      <div class="form-group" align="center">
+        <button
+          [hidden]="checkButton"
+          type="submit"
+          class="btn btn-success"
+          style="width: 100px"
+          *ngIf="isEdit || isAdd"
+        >
+          Lưu
+        </button>
+        <button
+          class="btn btn-danger"
+          style="width: 100px; margin-left: 20px"
+          (click)="modal.dismiss('Cross click')"
+        >
+          Thoát
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

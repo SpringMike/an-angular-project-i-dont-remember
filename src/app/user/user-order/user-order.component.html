@@ -1,0 +1,217 @@
+<app-header></app-header>
+<section class="hero hero-normal">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="hero__categories">
+          <div class="hero__categories__all">
+            <i class="fa fa-bars"></i>
+            <span>Thể loại HomeStay</span>
+          </div>
+          <ul>
+            <li *ngFor="let category of listCategory"><a
+              [routerLink]="['../category',category.id]">{{category.name}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form [formGroup]="searchForm" (ngSubmit)="search()">
+              <div class="hero__search__categories">
+                Tất cả
+                <span class="arrow_carrot-down"></span>
+              </div>
+              <input type="text" placeholder="Bạn muốn thuê HomeStay ở đâu?" formControlName="name">
+              <button type="submit" class="site-btn">TÌM KIẾM</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>0396355470</h5>
+              <span>Hỗ trợ 24/7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="breadcrumb-section set-bg" [style.background]="'url(../../../assets/static/img/anh1.jpg)'">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="breadcrumb__text">
+          <h2>{{status ? "HomeStay đã thuê" : "Chờ xác nhận"}}</h2>
+          <div class="breadcrumb__option">
+            <a routerLink="/">Trang chủ</a>
+            <span>{{status ? "HomeStay đã thuê" : "Chờ xác nhận"}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section *ngIf="status" class="shoping-cart spad">
+  <div class="container">
+    <h3 *ngIf="listBill == 0">Bạn chưa có đơn đặt nào !!!</h3>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="shoping__cart__table" *ngIf="listBill!=0">
+          <table>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Tên HomeStay</th>
+              <th>Tổng đặt đơn</th>
+              <th>Xem chi tiết</th>
+              <th style="text-align: center">Đánh giá</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bill of listBill; index as i">
+              <td>{{i + 1}}</td>
+              <td style="text-align: center">
+                <h5>{{bill.houseBill.name}}  </h5>
+              </td>
+              <td>
+                {{bill.totalPrice}} VNĐ
+              </td>
+              <td>
+                <a [routerLink]="['/house',bill.houseBill.id]" class="btn btn-primary"
+                   style="color: white; width: 80px; text-align: center">
+                  <i class="fas fa-info"></i>
+                </a>
+              </td>
+              <td>
+                <div>
+                  <button type="button" class="btn btn-primary" style="color: white; width: 80px"
+                          data-toggle="modal"
+                          data-target="#modal-review" (click)="getProductId(currentUser.id,bill.houseBill.id)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section *ngIf="!status" class="shoping-cart spad">
+  <div class="container">
+    <h3 *ngIf="listBill == 0">Bạn chưa có đơn đặt nào !!!</h3>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="shoping__cart__table" *ngIf="listBill!=0">
+          <table>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Mã đơn đặt</th>
+              <th>Ngày đặt</th>
+              <th>Trạng thái</th>
+              <th style="width: 160px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bill of listBill; index as i">
+              <td>{{i + 1}}</td>
+              <td>
+                {{bill.id}}
+              </td>
+              <td>
+                {{bill.bookingDate}}
+              </td>
+              <td>
+                {{bill.status}}
+              </td>
+              <td>
+                <div class="row">
+                  <div class="col-6">
+                  </div>
+                  <div class="col-6">
+                    <button type="button" class="btn btn-block btn-danger" style="color: white" data-toggle="modal"
+                            data-target="#modal-delete" (click)="getOrderId(bill.id)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="modal fade" id="modal-review">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Đánh giá HomeStay {{currentReview == null ? "" : " (Đã đánh giá)"}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="rating text-center" *ngIf="currentReview== null">
+          <span><i class="fas fa-star mr-2 {{star>=1?'rated':'unrated'}}" id="one" (click)="rate(1)"></i></span>
+          <span><i class="fas fa-star mr-2 {{star>=2?'rated':'unrated'}}" id="tưo" (click)="rate(2)"></i></span>
+          <span><i class="fas fa-star mr-2 {{star>=3?'rated':'unrated'}}" id="three" (click)="rate(3)"></i></span>
+          <span><i class="fas fa-star mr-2 {{star>=4?'rated':'unrated'}}" id="four" (click)="rate(4)"></i></span>
+          <span><i class="fas fa-star mr-2 {{star==5?'rated':'unrated'}}" id="five" (click)="rate(5)"></i></span>
+          <span>({{star}} sao)</span>
+        </div>
+        <div class="rating text-center" *ngIf="currentReview!= null">
+          <span><i class="fas fa-star mr-2 {{currentReview.evaluate>=1?'rated':'unrated'}}"></i></span>
+          <span><i class="fas fa-star mr-2 {{currentReview.evaluate>=2?'rated':'unrated'}}"></i></span>
+          <span><i class="fas fa-star mr-2 {{currentReview.evaluate>=3?'rated':'unrated'}}"></i></span>
+          <span><i class="fas fa-star mr-2 {{currentReview.evaluate>=4?'rated':'unrated'}}"></i></span>
+          <span><i class="fas fa-star mr-2 {{currentReview.evaluate==5?'rated':'unrated'}}"></i></span>
+          <span>({{currentReview.evaluate}} sao)</span>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="comment">Bình luận</label>
+          <textarea class="textarea" name="comment" id="comment"
+                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="createReview(star, productId)">Xác nhận</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Hủy đơn hàng</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có muốn hủy đơn hàng này không ?</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-danger" (click)="deleteBill(id)">Xóa</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<app-footer></app-footer>

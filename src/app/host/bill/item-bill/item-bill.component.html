@@ -1,0 +1,144 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ title }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label>Họ và tên người đặt</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="nameUser"
+              id="nameUser"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="telephoneNumber"
+              id="telephoneNumber"
+            />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="email"
+              id="email"
+            />
+          </div>
+          <div class="form-group">
+            <label>Tổng tiền ( VNĐ )</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="totalPrice"
+              id="totalPrice"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label>Ngày đặt</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="bookingDate"
+              id="bookingDate"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Ngày bắt đầu thuê</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="startDate"
+              id="startDate"
+            />
+          </div>
+
+
+          <div class="form-group">
+            <label>Ngày trả</label>
+            <input
+              type="text"
+              name=""
+              class="form-control"
+              formControlName="endDate"
+              id="endDate"
+            />
+          </div>
+          <table style="width: 100%; margin-top: 15px">
+            <tr *ngIf="listService.length !== 0">
+              <td><label>Danh sách dịch vụ muốn sử dụng </label></td>
+            </tr>
+            <tr
+              *ngFor="
+                      let service of listService  | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize;
+                      let i = index
+                    ">
+              <td><label>- {{service.name}}, giá {{service.price}}, thời gian sử dụng {{service.times}}</label></td>
+            </tr>
+          </table>
+          <div class="col-12" style="display: flex; justify-content: center;align-items: center">
+            <ngb-pagination *ngIf="listService.length > 2"
+                            [ellipses]="true" [rotate]="true"
+                            [boundaryLinks]="true" [(page)]="page"
+                            [pageSize]="pageSize"
+                            [collectionSize]="this.listService.length"></ngb-pagination>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" style="display:inline" *ngIf="!isInfo">
+        <label for="status">Trạng thái: </label>
+        <input type="checkbox" name="status" formControlName="status" id="status"/>
+        <label class="status"
+               style="background-color: green; color: #fff;text-align: center; border-radius: 2px;vertical-align: middle;"
+               for="status" *ngIf="formGroup.controls.status.value">Xác nhận</label>
+        <label class="status"
+               style="background-color: red;color:#fff; ;text-align: center; border-radius: 2px;vertical-align: middle;"
+               for="status" *ngIf="!formGroup.controls.status.value">Hủy</label>
+      </div>
+      <div class="form-group" align="center">
+        <button
+          [hidden]="checkButton"
+          type="submit"
+          class="btn btn-success"
+          style="width: 100px"
+          *ngIf="isEdit || isAdd"
+        >
+          Lưu
+        </button>
+        <button
+          class="btn btn-danger"
+          style="width: 100px; margin-left: 20px"
+          (click)="modal.dismiss('Cross click')"
+        >
+          Thoát
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

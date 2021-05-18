@@ -1,0 +1,156 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Danh sách tiện ích</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a routerLink="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Danh sách tiện ích</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"></h3>
+      <label>Lọc theo trạng thái: </label>
+      <select (change)="changeStatus($event.target.value)" class="custom-select"
+              style="margin-right: 10px; width: 200px">
+        <option [selected]="isSelected" disabled>--- Chọn trạng thái ---</option>
+        <option value="-1">Tất cả</option>
+        <option value="1">Hoạt động</option>
+        <option value="0">Không hoạt động</option>
+      </select>
+      <button (click)="initModal({}, 'add')" *ngIf="hasRoleAdmin" class="btn btn-success" style="width: 100px">
+        Tạo mới
+      </button>
+      <button [hidden]="isDelete" *ngIf="hasRoleAdmin"
+              class="btn btn-danger" style="margin-left: 15px; width: 100px" data-toggle="modal"
+              data-target="#modal-delete-list">
+        Xóa
+      </button>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered" id="table-utilitie">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;width: 10px" *ngIf="hasRoleAdmin">
+            <input
+              type="checkbox"
+              (change)="checkAllCheckBox($event)"
+            />
+          </th>
+          <th style="width: 10px">#</th>
+          <th style="text-align: center">Tên tiện ích</th>
+          <th style="text-align: center">Mô tả</th>
+          <th style="text-align: center">Trạng thái</th>
+          <th style="width: 200px; text-align: center" *ngIf="hasRoleAdmin">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let utilitie of listUtilitie; index as i">
+          <td style="text-align: center" *ngIf="hasRoleAdmin">
+            <input
+              type="checkbox"
+              [(ngModel)]="listUtilitie[i].checked"
+              (ngModelChange)="changeModel()"
+              value="{{ utilitie.id }}"
+            />
+          </td>
+          <td style="text-align: center">{{i + 1}}</td>
+          <td style="text-align: center">
+            <p>{{utilitie.name}}</p>
+          </td>
+          <td style="text-align: center">
+            <p>{{utilitie.description}}</p>
+          </td>
+          <td style="text-align: center">
+            <label class="status"
+                   style="background-color: green; color: #fff;text-align: center; border-radius: 2px;vertical-align: middle;"
+                   *ngIf="utilitie.status === true">Hoạt động</label>
+            <label class="status"
+                   style="background-color: red;color:#fff; ;text-align: center; border-radius: 2px;vertical-align: middle;"
+                   *ngIf="utilitie.status === false">Không hoạt động</label>
+          </td>
+          <td>
+            <div class="row">
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(utilitie, 'edit')" class="btn btn-block btn-warning"
+                        style="color: white">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleAdmin" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(utilitie, 'edit')" class="btn btn-block btn-warning"
+                        style="color: white">
+                  <i class="fas fa-check"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleUser" style="margin-left: auto; margin-right: auto">
+                <button (click)="initModal(utilitie, 'show')" class="btn btn-block btn-primary"
+                        style="color: white">
+                  <i class="fas fa-info"></i>
+                </button>
+              </div>
+              <div class="col-4" *ngIf="hasRoleAdmin" style="margin-left: auto; margin-right: auto">
+                <button type="button" class="btn btn-block btn-danger" style="color: white" data-toggle="modal"
+                        data-target="#modal-delete" (click)="getUtilitieId(utilitie.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa tiện ích</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa tiện ích này</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteUtilitie()">Xóa</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal fade" id="modal-delete-list">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Xóa danh sách tiện ích</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc muốn xóa danh sách tiện ích này ?</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-danger" (click)="deleteListUtilitie()">Xóa</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</section>
+<app-item-utilities (eventEmit)="getAllUtilitie()"></app-item-utilities>

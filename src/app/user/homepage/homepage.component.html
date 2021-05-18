@@ -1,0 +1,291 @@
+<app-header></app-header>
+<section class="hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="hero__categories">
+          <div class="hero__categories__all">
+            <i class="fa fa-bars"></i>
+            <span>Thể loại</span>
+          </div>
+          <ul *ngFor="let category of listCategory">
+            <li><a [routerLink]="['category',category.id]">{{category.name}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form [formGroup]="searchForm" (ngSubmit)="search()">
+              <div class="hero__search__categories">
+                Tất cả
+                <span class="arrow_carrot-down"></span>
+              </div>
+              <input type="text" placeholder="Bạn muốn thuê HomeStay ở đâu?" formControlName="name">
+              <button type="submit" class="site-btn">TÌM KIẾM</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>0396355470</h5>
+              <span>Hỗ trợ 24/7</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero__item set-bg" [style.background]="'url(../../../assets/static/img/hero/banner.png)'">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="categories">
+  <div class="container">
+    <div class="row">
+      <div class="categories__slider owl-carousel">
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+               [style.background]="'url(../../../assets/static/img/categories/HomeStay1.jpg)'">
+            <h5><a href="#">Hà Nội</a></h5>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+               [style.background]="'url(../../../assets/static/img/categories/HomeStay2.png)'">
+            <h5><a href="#">Đà Nẵng</a></h5>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+               [style.background]="'url(../../../assets/static/img/categories/HomeStay3.png)'">
+            <h5><a href="#">Hồ Chí Minh</a></h5>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+               [style.background]="'url(../../../assets/static/img/categories/HomeStay4.png)'">
+            <h5><a href="#">Quảng Ninh</a></h5>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="categories__item set-bg"
+               [style.background]="'url(../../../assets/static/img/categories/HomeStay5.png)'">
+            <h5><a href="#">Vũng Tàu</a></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="featured spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-title">
+          <h2>HomeStay nổi bật</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row featured__filter">
+      <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat" *ngFor="let house of listHouse">
+        <div class="product__discount__item">
+          <div class="product__discount__item__pic set-bg" *ngIf="house.images != null"
+               [style.background]="'url('+house.images[0].link+')'" style="background-size: 270px 270px">
+            <div *ngIf="house.discount!=0" class="product__discount__percent">-{{house.discount}}%</div>
+            <ul class="product__item__pic__hover">
+              <li><a [routerLink]="['/favorite', { id:house.id }]"><i class="fa fa-heart"></i></a></li>
+              <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+              <li>
+                <a [routerLink]="['../house',house.id]"><i class="fa fa-info-circle"></i></a>
+              </li>
+            </ul>
+          </div>
+          <div class="product__discount__item__text">
+            <span>{{house.category.name}}</span>
+            <h5>{{house.name}}</h5>
+            <h5>{{house.address}}</h5>
+            <div
+              class="product__item__price">
+              <h5 style="font-weight: bold; color: red">{{house.price - house.price * (house.discount / 100)}}( VNĐ /
+                Ngày)</h5>
+              <span *ngIf="house.discount!=0">{{house.price}}( VNĐ / Ngày)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="latest-product spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>HomeStay mới thêm</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseLatest">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{house.name}}</h6>
+                  <span>{{house.price}} (VNĐ / Ngày)</span>
+                </div>
+              </a>
+            </div>
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseLatest">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{house.name}}</h6>
+                  <span>{{house.price}} (VNĐ / Ngày)</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>HomeStay thuê nhiều</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseNumberHire">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{house.name}}</h6>
+                  <span>{{house.price}} (VNĐ / Ngày)</span>
+                  <span>{{house.numberHires}} lượt thuê</span>
+                </div>
+              </a>
+            </div>
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseNumberHire">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="latest-product__item__text">
+                  <h6>{{house.name}}</h6>
+                  <span>{{house.price}} (VNĐ / Ngày)</span>
+                  <span>{{house.numberHires}} lượt thuê</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="latest-product__text">
+          <h4>HomeStay đang giảm giá</h4>
+          <div class="latest-product__slider owl-carousel">
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseDiscount">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="product__discount__item__text">
+                  <h5>{{house.name}}</h5>
+                  <div
+                    class="product__item__price">{{house.price - house.price * (house.discount / 100)}}
+                    ( VNĐ / Ngày)
+                    <span>{{house.price}}( VNĐ / Ngày)</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="latest-prdouct__slider__item">
+              <a [routerLink]="['/house',house.id]" class="latest-product__item"
+                 *ngFor="let house of listHouseLatest">
+                <div class="latest-product__item__pic">
+                  <img [src]="house.images[0].link" *ngIf="house.images != null"
+                       style="width: 110px; height: 110px" alt="">
+                </div>
+                <div class="product__discount__item__text">
+                  <h5>{{house.name}}</h5>
+                  <div
+                    class="product__item__price">{{house.price - house.price * (house.discount / 100)}}
+                    ( VNĐ / Ngày)
+                    <span>{{house.price}}( VNĐ / Ngày)</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--<section class="from-blog spad">-->
+<!--  <div class="container">-->
+<!--    <div class="row">-->
+<!--      <div class="col-lg-12">-->
+<!--        <div class="section-title from-blog__title">-->
+<!--          <h2>Blog về HomeStay</h2>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-lg-4 col-md-4 col-sm-6">-->
+<!--        <div class="blog__item">-->
+<!--          <div class="blog__item__pic">-->
+<!--            <img src="assets/static/img/blog/blog-1.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="blog__item__text">-->
+<!--            <ul>-->
+<!--              <li><i class="fa fa-calendar"></i> May 4,2019</li>-->
+<!--              <li><i class="fa fa-comment"></i> 5</li>-->
+<!--            </ul>-->
+<!--            <h5><a href="#">Cooking tips make cooking simple</a></h5>-->
+<!--            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-lg-4 col-md-4 col-sm-6">-->
+<!--        <div class="blog__item">-->
+<!--          <div class="blog__item__pic">-->
+<!--            <img src="assets/static/img/blog/blog-2.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="blog__item__text">-->
+<!--            <ul>-->
+<!--              <li><i class="fa fa-calendar"></i> May 4,2019</li>-->
+<!--              <li><i class="fa fa-comment"></i> 5</li>-->
+<!--            </ul>-->
+<!--            <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>-->
+<!--            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-lg-4 col-md-4 col-sm-6">-->
+<!--        <div class="blog__item">-->
+<!--          <div class="blog__item__pic">-->
+<!--            <img src="assets/static/img/blog/blog-3.jpg" alt="">-->
+<!--          </div>-->
+<!--          <div class="blog__item__text">-->
+<!--            <ul>-->
+<!--              <li><i class="fa fa-calendar"></i> May 4,2019</li>-->
+<!--              <li><i class="fa fa-comment"></i> 5</li>-->
+<!--            </ul>-->
+<!--            <h5><a href="#">Visit the clean farm in the US</a></h5>-->
+<!--            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+<app-footer></app-footer>
